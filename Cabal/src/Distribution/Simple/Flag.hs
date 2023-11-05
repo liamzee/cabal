@@ -54,13 +54,16 @@ import Prelude ()
 --
 --   > --enable-foo --disable-foo
 --
---   gives us Just False
+--   gives us 'Just' 'False'
 --
 -- So, this 'Flag' type is for the latter singular kind of flag.
 -- Its monoid instance gives us the behaviour where it starts out as
 -- 'NoFlag' and later flags override earlier ones.
 --
--- Isomorphic to 'Maybe' a.
+-- Isomorphic to 'Maybe' a, with a different constructor order, lacking
+-- an instance of 'Monad' and 'Ord', and having a 'Semigroup' instance that
+-- resembles 'Maybe'\'s 'Alternative' instance, but with a different
+-- order of precedence.
 data Flag a = Flag a | NoFlag deriving (Eq, Generic, Show, Read, Typeable, Foldable, Traversable)
 
 instance Binary a => Binary (Flag a)

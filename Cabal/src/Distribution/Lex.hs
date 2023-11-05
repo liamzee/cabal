@@ -16,14 +16,16 @@ import Distribution.Compat.DList
 import Distribution.Compat.Prelude
 import Prelude ()
 
--- | A simple parser supporting quoted strings.
+-- | A simple tokenizer supporting quoted strings, used in
+-- Distribution.Simple.GHC.Internal to parse output from
+-- ghc -info.
 --
 -- Please be aware that this will only split strings when seeing whitespace
 -- outside of quotation marks, i.e, @"foo\"bar baz\"qux quux"@ will be
 -- converted to @["foobar bazqux", "quux"]@.
 --
 -- This behavior can be useful when parsing text like
--- @"ghc-options: -Wl,\"some option with spaces\""@, for instance.
+-- @("GCC extra via C opts","")@, for instance.
 tokenizeQuotedWords :: String -> [String]
 tokenizeQuotedWords = filter (not . null) . go False mempty
   where
@@ -48,3 +50,7 @@ tokenizeQuotedWords = filter (not . null) . go False mempty
       | c == '"' = go False accum cs
     go quoted accum (c : cs) =
       go quoted (accum `mappend` singleton c) cs
+
+{- Note: As this is a hidden module and is only used by one place in
+   the Cabal codebase, this may get moved to its use site
+   in the future. liamzee @ 27 Oct 23. -}
