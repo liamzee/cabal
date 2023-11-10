@@ -26,6 +26,7 @@ import Prelude ()
 -- | Difference list.
 newtype DList a = DList ([a] -> [a])
 
+-- | Convert a 'DList' to a list.
 runDList :: DList a -> [a]
 runDList (DList run) = run []
 
@@ -37,12 +38,15 @@ singleton a = DList (a :)
 empty :: DList a
 empty = DList id
 
+-- | Convert a list to a 'DList'
 fromList :: [a] -> DList a
 fromList as = DList (as ++)
 
+-- | Convert a 'DList' to a list.
 toList :: DList a -> [a]
 toList = runDList
 
+-- | Append an element to the rear of a 'DList'.
 snoc :: DList a -> a -> DList a
 snoc xs x = xs <> singleton x
 

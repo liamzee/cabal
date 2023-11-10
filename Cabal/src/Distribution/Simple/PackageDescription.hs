@@ -69,6 +69,8 @@ readAndParseFile parser verbosity fpath = do
   bs <- BS.readFile fpath
   parseString parser verbosity fpath bs
 
+-- | A wrapper around the parser that is its first argument.
+-- Shows warnings and exits on an error.
 parseString
   :: (BS.ByteString -> ParseResult a)
   -- ^ File contents to final value parser

@@ -63,7 +63,7 @@ instance Structured Language
 
 instance NFData Language where rnf = genericRnf
 
--- | List of known (supported) languages for GHC
+-- | List of known languages for GHC
 knownLanguages :: [Language]
 knownLanguages = [Haskell98, Haskell2010, GHC2021]
 
@@ -74,6 +74,7 @@ instance Pretty Language where
 instance Parsec Language where
   parsec = classifyLanguage <$> P.munch1 isAlphaNum
 
+-- | Return Haskell standard, giving 'UnknownLanguage' string if not known.
 classifyLanguage :: String -> Language
 classifyLanguage = \str -> case lookup str langTable of
   Just lang -> lang
@@ -611,5 +612,6 @@ knownExtensionTable =
     | (extension, str@(hd : _)) <- map (\e -> (e, show e)) [toEnum 0 ..]
     ]
 
+-- | List of all supported extensions.
 knownExtensions :: [KnownExtension]
 knownExtensions = [minBound .. maxBound]

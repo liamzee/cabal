@@ -134,7 +134,7 @@ flagToList :: Flag a -> [a]
 flagToList (Flag x) = [x]
 flagToList NoFlag = []
 
--- | Returns 'True' only if every 'Flag' 'Bool' value is Flag True, else 'False'.
+-- | Returns 'True' only if every 'Flag' 'Bool' value is 'Flag' 'True', else 'False'.
 allFlags :: [Flag Bool] -> Flag Bool
 allFlags flags =
   if all (\f -> fromFlagOrDefault False f) flags
