@@ -63,7 +63,7 @@ instance Structured Language
 
 instance NFData Language where rnf = genericRnf
 
--- | List of known languages for GHC
+-- | List of known (supported) 'Language's for GHC
 knownLanguages :: [Language]
 knownLanguages = [Haskell98, Haskell2010, GHC2021]
 
@@ -74,7 +74,7 @@ instance Pretty Language where
 instance Parsec Language where
   parsec = classifyLanguage <$> P.munch1 isAlphaNum
 
--- | Return Haskell standard, giving 'UnknownLanguage' string if not known.
+-- | Return Haskell 'Language' standard, giving 'UnknownLanguage' 'String' if not known.
 classifyLanguage :: String -> Language
 classifyLanguage = \str -> case lookup str langTable of
   Just lang -> lang
@@ -574,6 +574,8 @@ instance Parsec Extension where
 instance Pretty KnownExtension where
   pretty ke = Disp.text (show ke)
 
+-- | Parses string into an 'EnableExtension', a 'DisableExtension'
+-- i.e, @-XNoFoo@, or an 'UnknownExtension'.
 classifyExtension :: String -> Extension
 classifyExtension string =
   case classifyKnownExtension string of
@@ -602,6 +604,8 @@ classifyKnownExtension string@(c : _)
       lookup string (knownExtensionTable ! c)
   | otherwise = Nothing
 
+-- | Helper for 'classifyKnownextension'. Provides an 'Array'
+-- of buckets of extensions, indexed by the first letter of the extension.
 knownExtensionTable :: Array Char [(String, KnownExtension)]
 knownExtensionTable =
   accumArray
